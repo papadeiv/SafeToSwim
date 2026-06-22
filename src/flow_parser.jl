@@ -1,12 +1,12 @@
 using CSV, Dates, DataFrames
 
-function flow_parser(idx)
+function flow_parser(filename, col_idx)
        # Import the file 
-       df = CSV.read("../data/flow/Flow_Min.csv", DataFrame)
+       df = CSV.read("../data/"*filename, DataFrame)
 
        # Define the data arrays
        timestep = df[2:end,(names(df))[1]]
-       site = (names(df))[idx]
+       site = (names(df))[col_idx]
        river = df[2:end,site]
 
        # Clean the data
