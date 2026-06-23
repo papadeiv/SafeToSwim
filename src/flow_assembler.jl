@@ -14,7 +14,7 @@ function flow_assembler()
         dates = Date.(string.(data.data[:,1]), DateFormat("yyyy-mm-d"))
 
         # Import the E.coli data
-        filename = "Banu_Data/$(data.site).csv"
+        filename = "ecoli/$(data.site).csv"
         data = ecoli_parser(filename, 2)
 
         # Match the dates between flow (daily) and E.coli (weekly) measurements
