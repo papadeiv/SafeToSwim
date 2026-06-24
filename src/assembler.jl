@@ -1,14 +1,13 @@
 using DataFrames, CSV 
 using ProgressMeter
 
-include("./export_figure.jl")
 include("./flow_assembler.jl")
-#include("./rainfall_assembler.jl")
+include("./rainfall_assembler.jl")
 
 function assembler()
         # Generate the flow and rainfall lagged observation matrices
         flow_assembler()
-        #rainfall_assembler()
+        rainfall_assembler()
 
         # Loop over the observation matrices
         flow_matrix = nothing 
