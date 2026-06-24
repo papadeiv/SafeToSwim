@@ -3,6 +3,7 @@ using LinearAlgebra, Statistics
 using ProgressMeter, CairoMakie
 
 include("../src/assembler.jl")
+include("../src/plot_distribution.jl")
 
 # Build the observation matrices
 observation_matrices = assembler()
@@ -42,6 +43,9 @@ CSV.write("../data/observations/covariance.csv", DataFrame(Σ, :auto); header=fa
 decomposition = eigen(Σ)
 Λ = decomposition.values
 V = decomposition.vectors
+
+# Plot the data distribution
+plot_distribution(X)
 
 #=
 using GLMakie
