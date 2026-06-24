@@ -6,6 +6,7 @@ include("../src/assembler.jl")
 
 # Build the observation matrices
 observation_matrices = assembler()
+#=
 flow_matrix = observation_matrices.flow_matrix
 rainfall_matrix = observation_matrices.rainfall_matrix
 
@@ -21,6 +22,7 @@ X = Float64.(Matrix(sample))
 decomposition = eigen(Σ)
 Λ = decomposition.values
 V = decomposition.vectors 
+=#
 
 #=
 using GLMakie
