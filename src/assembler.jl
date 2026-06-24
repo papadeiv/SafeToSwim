@@ -14,55 +14,59 @@ function assembler()
         flow_names = nothing 
         rainfall_matrix = nothing 
         rainfall_names = nothing 
+        flow_sample_names = String[]
+        rainfall_sample_names = String[]
         printstyled("Assembling the data matrices\n"; bold=true, underline=true, color=:light_blue)
         @showprogress for n in 2:7
-                # Import the max flow data 
+                # Extract the flow data 
                 filename = "observations/flow_max/$n.csv"
                 df = CSV.read("../data/"*filename, DataFrame)
+                flow_ecoli_dates = df[!,(names(df))[1]]
+                flow_ecoli_value = df[!,(names(df))[2]]
+                flow_dates = df[!,(names(df))[3]]
+                flow_value = df[!,(names(df))[4]]
+                max_flow_value = df[!,(names(df))[5]]
+                tot_flow_value = df[!,(names(df))[6]]
+                flow_names = [(names(df))[m] for m in 1:6]
 
-                # Define the data arrays
-                dates_flow = df[!,(names(df))[1]]
-                daily_flow = df[!,(names(df))[2]]
-                max_past_days_flow = df[!,(names(df))[3]]
-                tot_past_days_flow = df[!,(names(df))[4]]
-
-                #=
-                # Import the rainfall data 
+                # Extract the rainfall data 
                 filename = "observations/rainfall/$n.csv"
                 df = CSV.read("../data/"*filename, DataFrame)
-
-                # Define the data arrays
-                dates_rainfall = df[!,(names(df))[1]]
-                daily_rainfall = df[!,(names(df))[2]]
-                max_past_days_rainfall = df[!,(names(df))[3]]
-                tot_past_days_rainfall = df[!,(names(df))[4]]
-                =#
+                rainfall_ecoli_dates = df[!,(names(df))[1]]
+                rainfall_ecoli_value = df[!,(names(df))[2]]
+                rainfall_dates = df[!,(names(df))[3]]
+                rainfall_value = df[!,(names(df))[4]]
+                max_rainfall_value = df[!,(names(df))[5]]
+                tot_rainfall_value = df[!,(names(df))[6]]
+                rainfall_names = [(names(df))[m] for m in 1:6]
 
                 # Append columns to the data matrix
                 if n==2
-                        flow_names = [(names(df))[m] for m in 1:4] 
-                        flow_matrix = hcat(dates_flow,
-                                                  daily_flow,
-                                                  max_past_days_flow,
-                                                  tot_past_days_flow
-                                                 ) 
-                        #=
-                        global flow_matrix = hcat(dates_rainfall,
-                                                  daily_rainfall,
-                                                  max_past_days_rainfall,
-                                                  tot_past_days_rainfall
-                                                 ) 
-                        =#
+                        flow_sample_names = [flow_names[1], flow_names[2], flow_names[4], flow_names[5], flow_names[6]] 
+                        flow_matrix = hcat(flow_ecoli_dates,
+                                           flow_ecoli_value,
+                                           flow_value,
+                                           max_flow_value,
+                                           tot_flow_value
+                                          ) 
+                        rainfall_sample_names = [rainfall_names[1], rainfall_names[2], rainfall_names[4], rainfall_names[5], rainfall_names[6]] 
+                        rainfall_matrix = hcat(rainfall_ecoli_dates,
+                                               rainfall_ecoli_value,
+                                               rainfall_value,
+                                               max_rainfall_value,
+                                               tot_rainfall_value
+                                              )
                 else
-                        flow_names = vcat(flow_names, (names(df))[3], (names(df))[4]) 
-                        flow_matrix = hcat(flow_matrix, max_past_days_flow, tot_past_days_flow)
-                        #global rainfall_matrix = hcat(rainfall_matrix, max_past_days_rainfall, tot_past_days_rainfall)
+                        flow_sample_names = vcat(flow_sample_names, flow_names[5], flow_names[6])
+                        flow_matrix = hcat(flow_matrix, max_flow_value, tot_flow_value)
+                        rainfall_sample_names = vcat(rainfall_sample_names, rainfall_names[5], rainfall_names[6])
+                        rainfall_matrix = hcat(rainfall_matrix, max_rainfall_value, tot_rainfall_value)
                 end
         end
 
         # Return the observation matrices
         return(
-               flow_matrix = DataFrame(flow_matrix, Symbol.(flow_names)),
-               rainfall_matrix = DataFrame(flow_matrix, Symbol.(flow_names)),
+               flow_matrix = DataFrame(flow_matrix, Symbol.(flow_sample_names)),
+               rainfall_matrix = DataFrame(rainfall_matrix, Symbol.(rainfall_sample_names)),
               )
 end
