@@ -34,9 +34,15 @@ CSV.write("../data/observations/sample.csv", sample)
 
 # Normalize the sample (zero mean and unitary standard deviation)
 X = (Float64.(Matrix(sample[:,2:end])) .- mean(Float64.(Matrix(sample[:,2:end])), dims=1))./std(Float64.(Matrix(sample[:,2:end])), dims=1)
+CSV.write("../data/observations/standardized_sample.csv", DataFrame(X, :auto); header=false)
+
+# Sanity check
+for (idx, feature) in enumerate(eachcol(X))
+        println("col.", idx, "    mean=", mean(feature), ", std=", std(feature))
+end
 
 # Compute the covariance matrix
-Σ = transpose(X)*X
+Σ = cov(X) # (1/(size(X,2) - 1)).*(transpose(X)*X)
 CSV.write("../data/observations/covariance.csv", DataFrame(Σ, :auto); header=false)
 
 # Perform the eigendecomposition of the covariance matrix
