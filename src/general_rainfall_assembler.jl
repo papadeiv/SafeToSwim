@@ -1,6 +1,6 @@
 using DataFrames, CSV
 
-include("../scripts/RainfallSitesIndex.jl")
+include("./RainfallSitesIndex.jl")
 include("./rainfall_parser.jl")
 
 function general_rainfall_assembler(EColiSiteName, RainfallSiteName)

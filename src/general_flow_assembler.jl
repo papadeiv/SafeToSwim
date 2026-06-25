@@ -1,13 +1,12 @@
 using DataFrames, CSV
 
-include("../scripts/FlowSitesIndex.jl")
+include("./FlowSitesIndex.jl")
 include("./flow_parser.jl")
 
 function general_flow_assembler(EColiSiteName, FlowSiteName)
         # Import and extract the flow data
-        filename = "flow/Flow_Max.csv"
         site_idx = FindMaxFlowSiteIndex(FlowSiteName)
-        data = flow_parser(filename, site_idx)
+        data = flow_parser("flow/Flow_Max.csv", site_idx)
         flow_dates = Date.(string.(data.data[:,1]), DateFormat("yyyy-mm-d"))
         flow_value = float.(data.data[:,2])
 
