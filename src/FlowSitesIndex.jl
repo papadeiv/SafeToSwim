@@ -4,7 +4,7 @@ using CSV, DataFrames
 # column for that site in the Flow_Max.csv 
 
 function FindMaxFlowSiteIndex(FlowSiteName)
-	df = CSV.read("/Users/dmit755/Desktop/MINZ_2026/data/flow/Flow_Max.csv", DataFrame)
+	df = CSV.read("../data/flow/Flow_Max.csv", DataFrame)
 	idx = findfirst(==(FlowSiteName), names(df))
 	return idx
 end

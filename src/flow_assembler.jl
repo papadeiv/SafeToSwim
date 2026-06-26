@@ -1,21 +1,19 @@
 using DataFrames, CSV
 
+include("./FlowSitesIndex.jl")
 include("./flow_parser.jl")
-include("./ecoli_parser.jl")
 
-function flow_assembler()
+function flow_assembler(EColiSiteName, FlowSiteName)
         # Import and extract the flow data
-        filename = "flow/Flow_Max.csv"
-        site_idx = 111
-        data = flow_parser(filename, site_idx)
+        site_idx = FindMaxFlowSiteIndex(FlowSiteName)
+        data = flow_parser("flow/Flow_Max.csv", site_idx)
         flow_dates = Date.(string.(data.data[:,1]), DateFormat("yyyy-mm-d"))
         flow_value = float.(data.data[:,2])
 
         # Import the and extract E.coli data
-        filename = "ecoli/$(data.site).csv"
-        data = ecoli_parser(filename, 2)
-        ecoli_dates = Date.(string.(data.data[:,1]), DateFormat("yyyy-mm-d"))
-        ecoli_value = float.(data.data[:,2])
+        data = CSV.read("../data/ecoli/$EColiSiteName.csv", DataFrame)
+        ecoli_dates = Date.(string.(data[:,1]), DateFormat("yyyy-mm-d"))
+        ecoli_value = float.(data[:,2])
 
         # Loop over the E.coli measurements 
         flow_idx = Integer[]

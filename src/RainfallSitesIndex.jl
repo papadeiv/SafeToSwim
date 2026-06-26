@@ -4,7 +4,7 @@ using CSV, DataFrames
 # column for that site in the RFTOTAL.csv 
 
 function FindRainfallSiteIndex(RainfallSiteName)
-	df = CSV.read("/Users/dmit755/Desktop/MINZ_2026/data/rainfall/RFTOTAL.csv", DataFrame)
+	df = CSV.read("../data/rainfall/RFTOTAL.csv", DataFrame)
 	idx = findfirst(==(RainfallSiteName), names(df))
 	return idx
 end

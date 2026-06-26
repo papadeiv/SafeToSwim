@@ -6,7 +6,12 @@ include("../src/assembler.jl")
 include("../src/plot_distribution.jl")
 
 # Build the observation matrices
-observation_matrices = assembler()
+observation_matrices = assembler("Waikawa at North Manakau Road","Waikawa at North Manakau Road","Ohau at Makahika")
+
+#=
+Alternative sites combination: Waikawa Estuary at Footbridge, Waikawa at North Manakau Road and Manakau at Manakau
+=#
+
 flow_df = observation_matrices.flow_matrix
 rainfall_df = observation_matrices.rainfall_matrix
 
@@ -32,6 +37,7 @@ deleteat!(rainfall_df, missing_idx)
 sample = hcat(flow_df, rainfall_df[:, 3:end])
 CSV.write("../data/observations/sample.csv", sample)
 
+#=
 # Normalize the sample (zero mean and unitary standard deviation)
 X = (Float64.(Matrix(sample[:,2:end])) .- mean(Float64.(Matrix(sample[:,2:end])), dims=1))./std(Float64.(Matrix(sample[:,2:end])), dims=1)
 CSV.write("../data/observations/standardized_sample.csv", DataFrame(X, :auto); header=false)
@@ -52,28 +58,4 @@ V = decomposition.vectors
 
 # Plot the data distribution
 plot_distribution(X)
-
-#=
-using GLMakie
-# Create and format the figure
-fig = Figure(; size = (1200, 600))
-ax = Axis(fig[1, 1],
-          xgridvisible = false,
-          ygridvisible = false,
-          #xlabel = "date",
-          #ylabel = "flow",
-          xlabelvisible = true,
-          ylabelvisible = true,
-          #title = data.site, 
-          #xticks = [-1,0,1],
-          #yticks = [-0.35,0,0.5],
-          xticklabelsvisible = true,
-          yticklabelsvisible = true,
-          xtickalign = 1,
-          ytickalign = 1,
-         )
-
-# Plot ?????????? 
-#lines!(ax, ???, ???)
-fig
 =#

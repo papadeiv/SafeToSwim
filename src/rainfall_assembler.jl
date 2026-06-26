@@ -1,21 +1,20 @@
 using DataFrames, CSV
 
+include("./RainfallSitesIndex.jl")
 include("./rainfall_parser.jl")
-include("./ecoli_parser.jl")
 
-function rainfall_assembler()
+function rainfall_assembler(EColiSiteName, RainfallSiteName)
         # Import and extract the rainfall data
         filename = "rainfall/RFTOTAL.csv"
-        site_idx = 56
+        site_idx = FindRainfallSiteIndex(RainfallSiteName)
         data = rainfall_parser(filename, site_idx)
         rainfall_dates = Date.(string.(data.data[:,1]), DateFormat("yyyy-mm-d"))
         rainfall_value = float.(data.data[:,2])
 
         # Import the and extract E.coli data
-        filename = "ecoli/Waikawa at North Manakau Road.csv"
-        data = ecoli_parser(filename, 2)
-        ecoli_dates = Date.(string.(data.data[:,1]), DateFormat("yyyy-mm-d"))
-        ecoli_value = float.(data.data[:,2])
+        data = CSV.read("../data/ecoli/$EColiSiteName.csv", DataFrame)
+        ecoli_dates = Date.(string.(data[:,1]), DateFormat("yyyy-mm-d"))
+        ecoli_value = float.(data[:,2])
 
         # Loop over the E.coli measurements 
         rainfall_idx = Integer[]

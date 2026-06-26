@@ -4,10 +4,10 @@ using ProgressMeter
 include("./flow_assembler.jl")
 include("./rainfall_assembler.jl")
 
-function assembler()
+function assembler(SiteName,FlowSiteName,RainfallSiteName)
         # Generate the flow and rainfall lagged observation matrices
-        flow_assembler()
-        rainfall_assembler()
+        flow_assembler(SiteName,FlowSiteName)
+        rainfall_assembler(SiteName,RainfallSiteName)
 
         # Loop over the observation matrices
         flow_matrix = nothing 
